@@ -16,11 +16,13 @@ API REST para gerenciamento de chamados técnicos:
 
 | Método | Endpoint | Descrição |
 |--------|-----------|-----------|
-| POST | /chamados/criar | Cria um novo chamado (chamado`) |
-| POST | /chamados/urgencua | Cria um novo chamado urgente(chamado`) |
+| POST | /chamados/comum | Cria um novo chamado (chamado`) |
 | GET | /chamados/espera | Lista todos os chamados em espera |
-| POST | /chamados| Atende o próximo chamado (`normal` ou `emergencia`) |
-| GET | /chamados | Mostra todos os chamados (resolvidos ou não) |
+| DELETE | /chamados/comum/atender | Resolver chamadas comums |
+| POST | /chamados/emergencia | Cria um novo chamado urgente(chamado`) |
+| GET | /chamados/emergencia/espera | Lista todos os chamados emergencial em espera |
+| DELETE | /chamados/emergnecia/resolver | Resolver chamadas emergencial |
+| GET | /chamados/historico | Mostra todos os chamados já resolvidas |
 | GET | /chamados/estatisticas | Mostra estatísticas gerais |
 
 ### 🔧 Exemplo de criação
