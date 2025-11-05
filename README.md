@@ -40,10 +40,9 @@ POST → http://localhost:8080/chamados/comum
   "cliente": "Maria"
 }
 ```
-Criar chamado emergência
-```json
 Criar chamado de emergência
 POST → http://localhost:8080/chamados/emergencia
+```json
 {
   "chamado": "Servidor caiu",
   "cliente": "João"
