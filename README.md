@@ -25,6 +25,20 @@ API REST para gerenciamento de chamados técnicos:
 | GET | /chamados/historico | Mostra todos os chamados já resolvidas |
 | GET | /chamados/estatisticas | Mostra estatísticas gerais |
 
+Criar chamado comum
+POST → http://localhost:8080/chamados/comum
+{
+  "chamado": "Computador travando",
+  "cliente": "Maria"
+}
+
+Criar chamado de emergência
+POST → http://localhost:8080/chamados/emergencia
+{
+  "chamado": "Servidor caiu",
+  "cliente": "João"
+}
+
 ### 🔧 Exemplo de criação
 ```bash
 git clone https://github.com/BiaAlvesP/Atividade-Back.git
