@@ -3,7 +3,8 @@
 ### Integrantes
 - Bianca Alves Pinheiro
 - Gabriel Nogueira
-- Isaias Oliveira 
+- Isaias Oliveira
+- Matheus Marques
 
 ### 💡 Descrição
 API REST para gerenciamento de chamados técnicos:
