@@ -1,7 +1,13 @@
 package atividade.sprint3.crud.controller;
 
-import atividade.sprint3.crud.ChamadosComuns;
+import atividade.sprint3.crud.service.ListaChamados;
+import atividade.sprint3.crud.service.ChamadosComuns;
+import atividade.sprint3.crud.service.PilhaService;
+import atividade.sprint3.crud.entity.ChamadosModel;
+import atividade.sprint3.crud.dto.ChamadoRequest;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,41 +15,69 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/chamados")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ChamadoController {
 
     private final ChamadosComuns chamadosComuns;
+    private final PilhaService pilhaService;
+    private final ListaChamados listaChamados;
 
-    @GetMapping
-    public List<ResponseEntity<T>> ListarAtendimentos(){
-        return null;
+    @PostMapping("/comum")
+    public ResponseEntity<ChamadosModel> criarChamadoComum(@RequestBody ChamadoRequest request) {
+        ChamadosModel chamado = chamadosComuns.adicionarChamado(
+                request.getChamado(),
+                request.getCliente(),
+                "comum"
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(chamado);
     }
 
-    @GetMapping("/espera")
-    public List<ResponseEntity<T>> ListarEmEspera(){
-        return null;
+    @GetMapping("/comum/espera")
+    public ResponseEntity<List<ChamadosModel>> listarChamadosEmEspera() {
+        List<ChamadosModel> chamados = chamadosComuns.listarChamados();
+        return ResponseEntity.ok(chamados);
     }
 
-    @PostMapping
-    public ResponseEntity<T> AtenderChamado(){
-        return null;
+    @DeleteMapping("/comum/atender")
+    public ResponseEntity<ChamadosModel> atenderChamadoComum() {
+        ChamadosModel atendido = chamadosComuns.atenderChamado();
+        if (atendido == null) {
+            return ResponseEntity.noContent().build();
+        }
+        listaChamados.cadastrarChamado(atendido);
+        return ResponseEntity.ok(atendido);
     }
 
-    @PostMapping("/criar")
-    public ResponseEntity<ChamadosComuns> CriarChamado(@RequestBody String chamado){
-
-        chamadosComuns.adicionarChamado(chamado);
-
-        return ResponseEntity.ok().build();
+    @PostMapping("/emergencia")
+    public ResponseEntity<ChamadosModel> criarChamadoEmergencia(@RequestBody ChamadoRequest request) {
+        ChamadosModel chamado = pilhaService.adicionarChamado(
+                request.getChamado(),
+                request.getCliente(),
+                "emergencia"
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(chamado);
     }
 
-    @PostMapping("/urgencia")
-    public ResponseEntity<T> CriarChamadoUrgente(@RequestBody String chamado){
-        return ResponseEntity.ok().build();
+    @GetMapping("/emergencia/espera")
+    public ResponseEntity<List<ChamadosModel>> listarChamadosEmergenciais() {
+        List<ChamadosModel> chamados = pilhaService.listarChamados();
+        return ResponseEntity.ok(chamados);
     }
 
-    @GetMapping("/estatisticas")
-    public ResponseEntity<T> RetornarEstatisticas(){
-        return null;
+    @DeleteMapping("/emergencia/resolver")
+    public ResponseEntity<ChamadosModel> resolverEmergencia() {
+        ChamadosModel resolvido = pilhaService.resolucaoImediata();
+        if (resolvido == null) {
+            return ResponseEntity.noContent().build();
+        }
+        listaChamados.cadastrarChamado(resolvido);
+        return ResponseEntity.ok(resolvido);
+    }
+
+
+    @GetMapping("/historico")
+    public ResponseEntity<List<ChamadosModel>> consultarHistorico() {
+        List<ChamadosModel> historico = listaChamados.listarHistorico();
+        return ResponseEntity.ok(historico);
     }
 }

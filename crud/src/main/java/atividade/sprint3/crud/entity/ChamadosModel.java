@@ -1,4 +1,4 @@
-package atividade.sprint3.crud;
+package atividade.sprint3.crud.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

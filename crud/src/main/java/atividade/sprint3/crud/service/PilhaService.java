@@ -1,8 +1,10 @@
-package atividade.sprint3.crud;
+package atividade.sprint3.crud.service;
 
+import atividade.sprint3.crud.entity.ChamadosModel;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 @Service
@@ -31,5 +33,13 @@ public class PilhaService {
         }
 
         return chamadosEmergenciais.peek();
+    }
+
+    public List<ChamadosModel> listarChamados(){
+        return new ArrayList<>(chamadosEmergenciais);
+    }
+
+    public int quantidadeEmEspera() {
+        return chamadosEmergenciais.size();
     }
 }
