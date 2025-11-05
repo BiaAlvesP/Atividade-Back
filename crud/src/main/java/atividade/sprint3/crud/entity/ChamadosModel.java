@@ -1,23 +1,15 @@
 package atividade.sprint3.crud.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
 public class ChamadosModel {
-
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String chamado;
     private String cliente;
     private String urgencia;
 
-    public String getUrgencia() {
-        return urgencia;
+
+    public ChamadosModel() {
     }
 
-    public void setUrgencia(String urgencia) {
-        this.urgencia = urgencia;
-    }
 
     public ChamadosModel(Integer id, String chamado, String cliente, String urgencia) {
         this.id = id;
@@ -25,6 +17,7 @@ public class ChamadosModel {
         this.cliente = cliente;
         this.urgencia = urgencia;
     }
+
 
     public Integer getId() {
         return id;
@@ -48,5 +41,23 @@ public class ChamadosModel {
 
     public void setCliente(String cliente) {
         this.cliente = cliente;
+    }
+
+    public String getUrgencia() {
+        return urgencia;
+    }
+
+    public void setUrgencia(String urgencia) {
+        this.urgencia = urgencia;
+    }
+
+    @Override
+    public String toString() {
+        return "ChamadosModel{" +
+                "id=" + id +
+                ", chamado='" + chamado + '\'' +
+                ", cliente='" + cliente + '\'' +
+                ", urgencia='" + urgencia + '\'' +
+                '}';
     }
 }

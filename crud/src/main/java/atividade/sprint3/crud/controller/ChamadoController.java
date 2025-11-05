@@ -1,12 +1,11 @@
 package atividade.sprint3.crud.controller;
 
+import atividade.sprint3.crud.dto.ChamadoResponse;
 import atividade.sprint3.crud.service.ListaChamados;
 import atividade.sprint3.crud.service.ChamadosComuns;
 import atividade.sprint3.crud.service.PilhaService;
 import atividade.sprint3.crud.entity.ChamadosModel;
 import atividade.sprint3.crud.dto.ChamadoRequest;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +14,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/chamados")
-@AllArgsConstructor
 public class ChamadoController {
 
     private final ChamadosComuns chamadosComuns;
     private final PilhaService pilhaService;
     private final ListaChamados listaChamados;
+
+
+    public ChamadoController(ChamadosComuns chamadosComuns,
+                             PilhaService pilhaService,
+                             ListaChamados listaChamados) {
+        this.chamadosComuns = chamadosComuns;
+        this.pilhaService = pilhaService;
+        this.listaChamados = listaChamados;
+    }
 
     @PostMapping("/comum")
     public ResponseEntity<ChamadosModel> criarChamadoComum(@RequestBody ChamadoRequest request) {
@@ -74,10 +81,35 @@ public class ChamadoController {
         return ResponseEntity.ok(resolvido);
     }
 
-
     @GetMapping("/historico")
     public ResponseEntity<List<ChamadosModel>> consultarHistorico() {
         List<ChamadosModel> historico = listaChamados.listarHistorico();
         return ResponseEntity.ok(historico);
     }
+    @GetMapping("/estatisticas")
+    public ResponseEntity<ChamadoResponse> obterEstatisticas() {
+
+        int emEsperaComum = chamadosComuns.quantidadeEmEspera();
+        int emEsperaEmergencia = pilhaService.quantidadeEmEspera();
+        int emEsperaTotal = emEsperaComum + emEsperaEmergencia;
+
+
+        int resolvidosTotal = listaChamados.quantidadeResolvidos();
+
+
+        long resolvidosComum = listaChamados.chamadosPorTipo().getOrDefault("comum", 0L);
+        long resolvidosEmergencia = listaChamados.chamadosPorTipo().getOrDefault("emergencia", 0L);
+
+        ChamadoResponse resposta = new ChamadoResponse(
+                emEsperaTotal,
+                emEsperaComum,
+                emEsperaEmergencia,
+                resolvidosTotal,
+                resolvidosComum,
+                resolvidosEmergencia
+        );
+
+        return ResponseEntity.ok(resposta);
+    }
+
 }
